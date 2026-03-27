@@ -3,637 +3,1130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>FG Vault | Vision OS</title>
+    <title>FG Vault | Vision OS Ultra</title>
     
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <style>
-        /* === VISION OS / ULTRA PREMIUM DESIGN SYSTEM === */
+        /* === VISION OS ULTRA - PREMIUM DESIGN SYSTEM 2.0 === */
         :root {
             --bg-amoled: #000000;
-            --glass-panel: rgba(20, 20, 25, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.12);
+            --bg-elevated: #0a0a0c;
+            --glass-primary: rgba(20, 20, 25, 0.75);
+            --glass-secondary: rgba(30, 30, 35, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-border-glow: rgba(255, 255, 255, 0.2);
             --glass-highlight: rgba(255, 255, 255, 0.05);
             
-            --color-obsolete: #FF4500; 
-            --color-in-use: #00E676;   
+            --color-active: #00E676;
+            --color-obsolete: #FF453A;
+            --color-primary: #0A84FF;
+            --color-secondary: #5E5CE6;
+            --color-accent: #BF5AF2;
+            --color-warning: #FF9F0A;
             
-            --spring: cubic-bezier(0.175, 0.885, 0.32, 1.1);
-            --smooth: cubic-bezier(0.2, 0.8, 0.2, 1);
+            --spring-bounce: cubic-bezier(0.34, 1.2, 0.64, 1);
+            --spring-smooth: cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
-            margin: 0; padding: 0; box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
         }
 
         body {
             background-color: var(--bg-amoled);
             color: #ffffff;
-            min-height: 101vh; 
-            padding-bottom: 120px;
-            -webkit-font-smoothing: antialiased;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+            min-height: 100vh;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* === OPTIMIZED LIVE AURORA BACKGROUND === */
-        .aurora-wrapper { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: var(--bg-amoled); contain: strict; }
-        .aurora-blob { position: absolute; border-radius: 50%; will-change: transform; animation: aurora 15s infinite alternate ease-in-out; }
-        .blob-1 { top: -20%; left: -20%; width: 70vw; height: 70vw; background: radial-gradient(circle, rgba(10,132,255,0.2) 0%, transparent 60%); }
-        .blob-2 { bottom: -30%; right: -20%; width: 80vw; height: 80vw; background: radial-gradient(circle, rgba(94,92,230,0.15) 0%, transparent 60%); animation-delay: -5s; }
-        .blob-3 { top: 30%; left: 40%; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(48,209,88,0.1) 0%, transparent 60%); animation-delay: -10s; }
+        /* === DYNAMIC AURORA BACKGROUND === */
+        .aurora-container {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            overflow: hidden;
+            background: radial-gradient(circle at 20% 30%, #0a0a1a 0%, #000000 100%);
+        }
         
-        @keyframes aurora { 0% { transform: translate3d(0,0,0) scale(1); } 100% { transform: translate3d(40px, 40px, 0) scale(1.1); } }
+        .aurora-wave {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 40%, rgba(10, 132, 255, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 60%, rgba(94, 92, 230, 0.12) 0%, transparent 50%),
+                        radial-gradient(ellipse at 40% 80%, rgba(191, 90, 242, 0.08) 0%, transparent 50%);
+            animation: auroraFlow 24s ease-in-out infinite;
+        }
+        
+        @keyframes auroraFlow {
+            0%, 100% { transform: translate(-10%, -10%) rotate(0deg); opacity: 0.6; }
+            50% { transform: translate(10%, 5%) rotate(2deg); opacity: 1; }
+        }
 
-        /* === STICKY NAV & SEARCH === */
+        /* === GLASS MORPHISM ENHANCED === */
+        .glass-premium {
+            background: var(--glass-primary);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 28px;
+        }
+
+        .glass-elevated {
+            background: var(--glass-secondary);
+            backdrop-filter: blur(32px) saturate(200%);
+            border: 0.5px solid var(--glass-border-glow);
+        }
+
+        /* === HEADER SECTION === */
         .super-header {
-            position: sticky; top: 0; z-index: 100;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 80%, transparent 100%);
-            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(0,0,0,0.9) 70%, transparent 100%);
             padding: 20px 20px 16px 20px;
-            transform: translateZ(0); 
         }
 
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(10, 132, 255, 0.3);
+        }
+
+        .status-indicator {
+            background: rgba(255,255,255,0.08);
+            border: 0.5px solid rgba(255,255,255,0.15);
+            border-radius: 40px;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-active);
+            box-shadow: 0 0 8px var(--color-active);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        /* === STATS CARDS PREMIUM === */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(20,20,25,0.8), rgba(15,15,20,0.9));
+            border: 0.5px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 14px 10px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+
+        .stat-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 4px;
+        }
+
+        /* === SEARCH POD === */
         .search-pod {
-            position: relative; background: rgba(255,255,255,0.06);
-            border: 1px solid var(--glass-border); border-radius: 20px;
-            display: flex; align-items: center; padding: 4px; transition: all 0.3s var(--smooth);
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            transition: all 0.3s var(--ease-out);
         }
-        .search-pod:focus-within {
-            background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3);
-            box-shadow: 0 0 25px rgba(255,255,255,0.05), inset 0 2px 10px rgba(0,0,0,0.3);
-        }
-        .search-input { 
-            width: 100%; background: transparent; border: none; color: #FFF; 
-            padding: 14px 44px 14px 44px; /* Space for both left icon and right clear button */
-            font-size: 17px; font-weight: 500; outline: none; 
-        }
-        .search-input::placeholder { color: rgba(255,255,255,0.3); }
-        .search-icon { position: absolute; left: 16px; color: rgba(255,255,255,0.4); font-size: 18px; transition: 0.3s; }
-        .search-pod:focus-within .search-icon { color: #FFF; }
-        
-        /* The Clear Button (Perfectly placed on extreme right) */
-        .clear-btn {
-            position: absolute; right: 12px; color: rgba(255,255,255,0.4);
-            background: transparent; border: none; outline: none; padding: 8px;
-            font-size: 20px; cursor: pointer; transition: 0.2s var(--smooth);
-        }
-        .clear-btn:hover { color: #FFF; transform: scale(1.1); }
-        .clear-btn:active { transform: scale(0.9); }
 
-        /* === PILLS & SEARCH BADGE === */
-        .pill-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 16px 0 4px 0; scrollbar-width: none; align-items: center; }
-        .pill-scroll::-webkit-scrollbar { display: none; }
-        
-        /* The New Placement for Search Results */
-        .result-badge {
-            background: linear-gradient(135deg, #0A84FF 0%, #5E5CE6 100%);
-            color: #FFF; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 800;
-            white-space: nowrap; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 4px 15px rgba(10, 132, 255, 0.4);
-            animation: popIn 0.3s var(--spring);
+        .search-pod:focus-within {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 20px rgba(10, 132, 255, 0.2);
         }
-        @keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
-        
-        .pill-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.1); margin: 0 4px; flex-shrink: 0; }
+
+        .search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 14px 12px 14px 48px;
+            font-size: 17px;
+            font-weight: 500;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            color: rgba(255,255,255,0.4);
+            font-size: 18px;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 16px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .clear-search:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* === FILTER PILLS === */
+        .filter-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 16px 0 8px;
+            scrollbar-width: none;
+        }
+
+        .filter-scroll::-webkit-scrollbar {
+            display: none;
+        }
 
         .filter-pill {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
-            color: #AAA; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700;
-            white-space: nowrap; cursor: pointer; transition: 0.2s var(--smooth);
-            will-change: transform; flex-shrink: 0;
+            background: rgba(255,255,255,0.06);
+            border: 0.5px solid var(--glass-border);
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.25s var(--spring-smooth);
         }
-        .filter-pill.active { background: #FFF; color: #000; border-color: #FFF; }
-        .filter-pill:active { transform: scale(0.95); }
 
-        /* === DASHBOARD === */
-        .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
-        .dash-card {
-            background: var(--glass-panel); border: 1px solid var(--glass-border);
-            border-radius: 20px; padding: 16px 12px; text-align: center;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        .filter-pill.active {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(10, 132, 255, 0.4);
         }
-        .dash-num { font-size: 26px; font-weight: 900; line-height: 1; margin-bottom: 4px; text-shadow: 0 2px 10px rgba(255,255,255,0.2); }
-        .dash-lbl { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.6; }
 
-        /* === PREMIUM LIST CARDS (Optimized) === */
+        .result-chip {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            animation: chipPop 0.3s var(--spring-bounce);
+        }
+
+        @keyframes chipPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* === ITEM CARDS - ULTRA PREMIUM === */
         .item-card {
-            background: var(--glass-panel); border: 1px solid var(--glass-border);
-            border-radius: 24px; padding: 18px; margin-bottom: 16px;
-            display: flex; gap: 16px; align-items: stretch; position: relative; overflow: hidden;
-            cursor: pointer; box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            transition: all 0.25s var(--smooth);
-            
-            contain: content; will-change: transform, opacity;
-            opacity: 0; transform: translateY(15px);
-            animation: slideUp 0.4s forwards var(--smooth);
-            animation-delay: calc(var(--stagger-idx) * 0.03s);
+            background: linear-gradient(135deg, rgba(25,25,30,0.9), rgba(18,18,22,0.95));
+            border: 0.5px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 18px;
+            margin-bottom: 14px;
+            display: flex;
+            gap: 14px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.35s var(--spring-smooth);
+            animation: cardReveal 0.4s forwards;
+            transform-origin: center;
         }
 
-        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes cardReveal {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
 
         .item-card:hover {
-            transform: translateY(-3px) scale(1.01);
-            border-color: var(--glass-hover);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
-            background: rgba(30, 30, 35, 0.85);
-        }
-        .item-card:active { transform: scale(0.97); }
-
-        .card-accent { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; box-shadow: 2px 0 15px currentColor; }
-        
-        .icon-box {
-            width: 56px; height: 56px; border-radius: 16px; flex-shrink: 0;
-            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 24px; color: rgba(255,255,255,0.7);
+            transform: translateY(-4px) scale(1.01);
+            border-color: var(--color-primary);
+            box-shadow: 0 20px 35px -15px rgba(10, 132, 255, 0.3);
         }
 
-        .card-body { flex: 1; min-w: 0; display: flex; flex-direction: column; justify-content: center; pointer-events: none; }
-        .item-name { font-size: 17px; font-weight: 700; color: #FFF; line-height: 1.3; margin-bottom: 8px; word-wrap: break-word; white-space: normal; }
-        .tag-code { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); font-family: monospace; font-size: 12px; font-weight: 800; padding: 4px 8px; border-radius: 8px; color: #CCC; }
-        
-        .view-arrow {
-            position: absolute; right: 16px; top: 50%; 
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(10, 132, 255, 0.1);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .item-card:hover .card-icon {
+            background: rgba(10, 132, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 6px;
+        }
+
+        .item-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .meta-badge {
+            background: rgba(255,255,255,0.08);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: monospace;
+        }
+
+        .stat-badge {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: right;
+            transition: all 0.3s;
+        }
+
+        .stat-badge-number {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .item-card:hover .stat-badge {
+            transform: translateY(-50%) translateX(-20px);
+            opacity: 0;
+        }
+
+        .hover-arrow {
+            position: absolute;
+            right: 18px;
+            top: 50%;
             transform: translateY(-50%) translateX(20px);
-            color: #FFF; font-size: 20px; transition: all 0.3s var(--spring);
-            opacity: 0; pointer-events: none;
-        }
-        
-        .card-stats { 
-            display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
-            transition: transform 0.3s var(--spring); transform: translateX(0); pointer-events: none;
+            font-size: 20px;
+            opacity: 0;
+            transition: all 0.3s var(--spring-smooth);
+            color: var(--color-primary);
         }
 
-        /* Hover Mechanics: Stats slide left, Arrow slides in */
-        .item-card:hover .card-stats { transform: translateX(-24px); } 
-        .item-card:hover .view-arrow { transform: translateY(-50%) translateX(0); opacity: 1; }
-
-        /* === FLOATING MODAL === */
-        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 900; opacity: 0; pointer-events: none; transition: opacity 0.3s; transform: translateZ(0); }
-        .modal-backdrop.show { opacity: 1; pointer-events: auto; }
-
-        .floating-modal {
-            position: fixed; bottom: 16px; left: 16px; right: 16px; z-index: 1000;
-            background: rgba(18, 18, 22, 0.95); border: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px); border-radius: 32px;
-            transform: translate3d(0, 120%, 0); transition: transform 0.4s var(--spring);
-            max-height: 88vh; display: flex; flex-direction: column;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.1);
-            will-change: transform;
+        .item-card:hover .hover-arrow {
+            transform: translateY(-50%) translateX(0);
+            opacity: 1;
         }
-        .floating-modal.show { transform: translate3d(0, 0, 0); }
 
-        .close-btn-modal {
-            width: 36px; height: 36px; border-radius: 18px; background: rgba(255,255,255,0.1);
-            color: white; border: none; display: flex; align-items: center; justify-content: center;
-            font-size: 16px; cursor: pointer; transition: 0.2s; flex-shrink: 0;
-            will-change: transform;
+        /* === CHART SECTION === */
+        .charts-section {
+            margin: 24px 0;
         }
-        .close-btn-modal:active { transform: scale(0.9); background: rgba(255,255,255,0.2); }
 
-        .spec-container { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 16px; margin-bottom: 16px; }
-        .spec-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center; }
-        .spec-row:last-child { border-bottom: none; padding-bottom: 0; }
-        .spec-lbl { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.5); display: flex; align-items: center; gap: 8px;}
-        .spec-val { font-size: 15px; font-weight: 800; color: #FFF; max-width: 60%; text-align: right; word-wrap: break-word; }
-
-        .share-btn {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white; border: none; padding: 18px; border-radius: 20px;
-            font-size: 17px; font-weight: 800; width: 100%; display: flex; justify-content: center; align-items: center; gap: 10px;
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); transition: 0.2s var(--spring); cursor: pointer; margin-top: 10px;
-            will-change: transform;
+        .chart-card {
+            background: var(--glass-primary);
+            backdrop-filter: blur(20px);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 16px;
         }
-        .share-btn:hover { box-shadow: 0 12px 30px rgba(16, 185, 129, 0.6); transform: translateY(-2px); }
-        .share-btn:active { transform: scale(0.96); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
 
-        /* === SCROLL FABS === */
-        .fab-container { position: fixed; bottom: 30px; right: 20px; z-index: 800; display: flex; flex-direction: column; gap: 12px; }
-        .fab {
-            width: 50px; height: 50px; border-radius: 25px; cursor: pointer;
-            background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.15);
-            color: #FFF; display: flex; align-items: center; justify-content: center; font-size: 18px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.2s var(--spring);
-            will-change: transform;
+        /* === MODAL VISION PRO === */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(16px);
+            z-index: 900;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s var(--ease-out);
         }
-        .fab:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
-        .fab:active { transform: scale(0.9); }
 
-        /* === TOAST === */
-        #toast {
-            position: fixed; top: 50px; left: 50%; transform: translate(-50%, -200%);
-            background: rgba(255,255,255,0.95); color: black; padding: 14px 24px;
-            border-radius: 30px; font-weight: 800; font-size: 14px; z-index: 10000;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5); transition: transform 0.4s var(--spring);
-            display: flex; align-items: center; gap: 10px; will-change: transform;
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
-        #toast.show { transform: translate3d(-50%, 0, 0); }
+
+        .modal-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(20,20,25,0.95);
+            backdrop-filter: blur(40px);
+            border: 0.5px solid var(--glass-border-glow);
+            border-radius: 32px;
+            z-index: 1000;
+            transform: translateY(120%);
+            transition: transform 0.4s var(--spring-bounce);
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-container.active {
+            transform: translateY(0);
+        }
+
+        /* === FLOATING ACTIONS === */
+        .fab-group {
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 200;
+        }
+
+        .fab-btn {
+            width: 52px;
+            height: 52px;
+            background: rgba(30,30,35,0.9);
+            backdrop-filter: blur(20px);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s var(--spring-smooth);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .fab-btn:active {
+            transform: scale(0.92);
+        }
+
+        /* === TOAST NOTIFICATION === */
+        .toast-notification {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(30,30,35,0.95);
+            backdrop-filter: blur(20px);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 60px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1100;
+            opacity: 0;
+            transition: all 0.3s var(--spring-bounce);
+            white-space: nowrap;
+        }
+
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* === EMPTY STATE === */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+        }
+
+        /* === UTILITIES === */
+        .status-active { color: var(--color-active); }
+        .status-obsolete { color: var(--color-obsolete); }
+        .bg-status-active { background: var(--color-active); }
+        .bg-status-obsolete { background: var(--color-obsolete); }
+
+        @media (max-width: 480px) {
+            .stats-grid { gap: 8px; }
+            .stat-number { font-size: 22px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="aurora-wrapper">
-        <div class="aurora-blob blob-1"></div>
-        <div class="aurora-blob blob-2"></div>
-        <div class="aurora-blob blob-3"></div>
+    <!-- Aurora Background -->
+    <div class="aurora-container">
+        <div class="aurora-wave"></div>
     </div>
 
+    <!-- Header -->
     <div class="super-header">
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <h1 class="text-3xl font-black text-white tracking-tight flex items-center gap-3">
-                    <i class="fas fa-fingerprint text-blue-500"></i> FG Vault
-                </h1>
+        <div class="flex justify-between items-center mb-5">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-cube text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-tight">FG Vault</h1>
+                    <p class="text-[10px] text-gray-400 tracking-wider">VISION OS ULTRA</p>
+                </div>
             </div>
-            <div class="bg-white/10 border border-white/10 px-4 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
-                <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#00E676] animate-pulse"></div>
-                <span class="text-sm font-bold tracking-widest text-gray-200" id="godBadge">SYNCING</span>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span class="text-xs font-semibold" id="syncStatus">LIVE</span>
             </div>
         </div>
 
-        <div class="dash-grid">
-            <div class="dash-card">
-                <span class="dash-num text-white" id="stat-total">-</span>
-                <span class="dash-lbl text-gray-400">Total Items</span>
+        <!-- Stats Dashboard -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number text-white" id="statTotal">-</div>
+                <div class="stat-label">Total Assets</div>
             </div>
-            <div class="dash-card" style="box-shadow: inset 0 -4px 0 var(--color-in-use);">
-                <span class="dash-num" style="color: var(--color-in-use);" id="stat-active">-</span>
-                <span class="dash-lbl text-gray-400">Active</span>
+            <div class="stat-card">
+                <div class="stat-number" style="color: var(--color-active);" id="statActive">-</div>
+                <div class="stat-label">Active</div>
             </div>
-            <div class="dash-card" style="box-shadow: inset 0 -4px 0 var(--color-obsolete);">
-                <span class="dash-num" style="color: var(--color-obsolete);" id="stat-obsolete">-</span>
-                <span class="dash-lbl text-gray-400">Obsolete</span>
+            <div class="stat-card">
+                <div class="stat-number" style="color: var(--color-obsolete);" id="statObsolete">-</div>
+                <div class="stat-label">Obsolete</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="statVendors">-</div>
+                <div class="stat-label">Vendors</div>
             </div>
         </div>
-        
-        <div class="search-pod">
+
+        <!-- Search Bar -->
+        <div class="search-pod relative">
             <i class="fas fa-search search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="Search records..." autocomplete="off">
-            <button id="clearBtn" class="clear-btn hidden"><i class="fas fa-times-circle"></i></button>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by name, code, vendor..." autocomplete="off">
+            <button id="clearSearchBtn" class="clear-search"><i class="fas fa-times"></i></button>
         </div>
 
-        <div class="pill-scroll" id="pillContainer">
-            <div id="searchBadge" class="result-badge hidden">
-                <i class="fas fa-layer-group"></i> <span id="searchBadgeText">0 Found</span>
+        <!-- Filters Row -->
+        <div class="filter-scroll" id="filterContainer">
+            <div id="resultChip" class="result-chip hidden">
+                <i class="fas fa-chart-simple"></i>
+                <span id="resultCount">0</span> Results
             </div>
-            <div id="pillDivider" class="pill-divider hidden"></div>
-
-            <button class="filter-pill active" onclick="app.setFilter('ALL', this)">All Items</button>
-            <button class="filter-pill" onclick="app.setFilter('IN USE', this)">Active Only</button>
-            <button class="filter-pill" onclick="app.setFilter('OBSOLETE', this)">Obsolete</button>
+            <button class="filter-pill active" data-filter="ALL">All Items</button>
+            <button class="filter-pill" data-filter="IN USE">Active Only</button>
+            <button class="filter-pill" data-filter="OBSOLETE">Discontinued</button>
         </div>
     </div>
 
-    <div id="mainContent" class="px-5 pb-10">
-        <div id="welcomeState" class="flex flex-col items-center justify-center py-16 text-center opacity-90">
-            <div class="w-24 h-24 bg-black/50 border border-white/10 rounded-full flex items-center justify-center mb-6 shadow-2xl backdrop-blur-md">
-                <i class="fas fa-database text-4xl text-gray-500"></i>
+    <!-- Charts Section (NEW) -->
+    <div class="px-5 mb-5 charts-section" id="chartsSection">
+        <div class="chart-card">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300">Category Distribution</h3>
+                    <p class="text-[10px] text-gray-500">Top material categories</p>
+                </div>
+                <i class="fas fa-chart-pie text-gray-500"></i>
             </div>
-            <h3 class="text-2xl font-black text-white mb-2 tracking-tight">Database Connected</h3>
-            <p class="text-sm text-gray-400 max-w-[280px]">Type in the search bar or tap a filter above to reveal inventory.</p>
+            <canvas id="categoryChart" height="180" style="max-height: 180px; width: 100%;"></canvas>
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="px-5 pb-24" id="contentArea">
+        <div id="emptyState" class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-database text-gray-600 text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Ready</h3>
+            <p class="text-sm text-gray-500">Search or filter to explore inventory</p>
         </div>
         
         <div id="listContainer" class="hidden"></div>
     </div>
 
-    <div class="fab-container">
-        <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="fab"><i class="fas fa-arrow-up"></i></button>
-        <button onclick="window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'})" class="fab"><i class="fas fa-arrow-down"></i></button>
+    <!-- Floating Action Buttons -->
+    <div class="fab-group">
+        <button class="fab-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        <button class="fab-btn" onclick="window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'})">
+            <i class="fas fa-arrow-down"></i>
+        </button>
     </div>
 
-    <div id="modalBackdrop" class="modal-backdrop" onclick="app.closeModal()"></div>
-    <div id="detailModal" class="floating-modal">
-        
-        <div class="flex justify-between items-start p-6 pb-4 border-b border-white/10 bg-white/5 rounded-t-[32px]">
-            <div class="flex-1 pr-4">
-                <span id="mStatusBadge" class="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md mb-3 inline-block text-white shadow-lg"></span>
-                <h2 id="mName" class="text-2xl font-black text-white leading-tight break-words whitespace-normal mb-3"></h2>
-                <div class="flex items-center gap-2">
-                    <span id="mCode" class="tag-code bg-blue-500/20 text-blue-300 border-blue-500/30"></span>
-                    <span id="mOldCode" class="text-gray-500 font-mono text-xs font-bold"></span>
+    <!-- Modal -->
+    <div id="modalOverlay" class="modal-overlay"></div>
+    <div id="modalContainer" class="modal-container">
+        <div class="p-5 border-b border-white/10 flex justify-between items-start">
+            <div>
+                <span id="modalStatusBadge" class="text-[10px] font-black px-3 py-1 rounded-full inline-block mb-2"></span>
+                <h2 id="modalName" class="text-2xl font-black text-white leading-tight mb-2"></h2>
+                <div class="flex gap-2 flex-wrap">
+                    <span id="modalCode" class="text-xs font-mono bg-white/10 px-3 py-1 rounded-full"></span>
+                    <span id="modalOldCode" class="text-xs text-gray-500"></span>
                 </div>
             </div>
-            <button onclick="app.closeModal()" class="close-btn-modal shadow-lg"><i class="fas fa-times"></i></button>
-        </div>
-        
-        <div class="flex-1 overflow-y-auto p-6 pb-8">
-            <h4 class="text-[11px] font-black text-gray-500 uppercase tracking-widest mb-3 pl-1">Technical Data</h4>
-            <div class="spec-container">
-                <div class="spec-row"><span class="spec-lbl"><i class="fas fa-shapes"></i> Shape</span><span id="mShape" class="spec-value"></span></div>
-                <div class="spec-row bg-blue-500/10 -mx-4 px-4 py-3 border-y border-blue-500/20 shadow-inner">
-                    <span class="spec-lbl text-blue-400 font-bold"><i class="fas fa-circle-notch"></i> Body Dia Major</span>
-                    <span id="mDia" class="spec-value text-blue-400 text-lg"></span>
-                </div>
-                <div class="spec-row"><span class="spec-lbl"><i class="fas fa-ruler-vertical"></i> Total Height</span><span id="mHeight" class="spec-value"></span></div>
-                <div class="spec-row"><span class="spec-label spec-lbl"><i class="fas fa-weight-hanging"></i> Weight</span><span id="mWeight" class="spec-value"></span></div>
-                <div class="spec-row"><span class="spec-lbl"><i class="fas fa-flask"></i> OFC</span><span id="mOfc" class="spec-value"></span></div>
-            </div>
-
-            <h4 class="text-[11px] font-black text-gray-500 uppercase tracking-widest mb-3 mt-6 pl-1">Packaging Matrix</h4>
-            <div class="spec-container mb-6">
-                <div class="spec-row"><span class="spec-lbl">Direction</span><span id="mDir" class="spec-value text-sm text-gray-300"></span></div>
-                <div class="spec-row"><span class="spec-lbl">CB Size</span><span id="mCBSize" class="spec-value text-sm text-gray-300"></span></div>
-                <div class="spec-row"><span class="spec-lbl">Pouch Size</span><span id="mPouchSize" class="spec-value text-sm text-gray-300"></span></div>
-                <div class="spec-row"><span class="spec-lbl">Matrix/Tray</span><span id="mMatrix" class="spec-value text-sm text-gray-300"></span></div>
-                <div class="spec-row"><span class="spec-lbl">Total Pouch</span><span id="mTotalPouch" class="spec-value"></span></div>
-                <div class="spec-row pt-4 mt-2 border-t border-white/10">
-                    <span class="spec-lbl text-white font-bold"><i class="fas fa-boxes-stacked"></i> Total Pcs</span>
-                    <span id="mTotalPcs" class="text-2xl font-black text-white"></span>
-                </div>
-            </div>
-
-            <button class="share-btn" onclick="app.nativeShare()">
-                <i class="fas fa-share-nodes text-xl"></i> Share Details
+            <button onclick="closeModal()" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition">
+                <i class="fas fa-times"></i>
             </button>
         </div>
+        
+        <div class="flex-1 overflow-y-auto p-5">
+            <div class="space-y-5">
+                <!-- Technical Specs -->
+                <div>
+                    <h4 class="text-xs font-black text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fas fa-microchip"></i> Technical Specifications
+                    </h4>
+                    <div class="bg-black/30 rounded-2xl p-4 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Shape</span>
+                            <span id="modalShape" class="text-sm font-semibold text-white">-</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-white/5 -mx-4 px-4 py-3 rounded-xl">
+                            <span class="text-sm text-blue-400 font-semibold">Body Diameter</span>
+                            <span id="modalDia" class="text-lg font-black text-blue-400">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Total Height</span>
+                            <span id="modalHeight" class="text-sm font-semibold text-white">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Weight</span>
+                            <span id="modalWeight" class="text-sm font-semibold text-white">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">OFC</span>
+                            <span id="modalOfc" class="text-sm font-semibold text-white">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Packaging Matrix -->
+                <div>
+                    <h4 class="text-xs font-black text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fas fa-box"></i> Packaging Matrix
+                    </h4>
+                    <div class="bg-black/30 rounded-2xl p-4 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Direction</span>
+                            <span id="modalDir" class="text-sm font-semibold text-white">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">CB Size</span>
+                            <span id="modalCBSize" class="text-sm font-semibold text-white">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Pouch Size</span>
+                            <span id="modalPouchSize" class="text-sm font-semibold text-white">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Matrix/Tray</span>
+                            <span id="modalMatrix" class="text-sm font-semibold text-white">-</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-3 border-t border-white/10">
+                            <span class="text-lg font-black text-white">Total Pieces</span>
+                            <span id="modalTotalPcs" class="text-2xl font-black text-white">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="shareItem()" class="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl font-bold text-white flex items-center justify-center gap-2 transition transform active:scale-95">
+                    <i class="fas fa-share-alt"></i> Share Details
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div id="toast"><i class="fas fa-check-circle text-green-600 text-lg"></i> <span id="toastMsg">Action completed</span></div>
+    <!-- Toast -->
+    <div id="toast" class="toast-notification">
+        <i class="fas fa-check-circle text-green-500"></i>
+        <span id="toastMsg">Copied to clipboard</span>
+    </div>
 
     <script>
-        const CONFIG = { FILE_NAME: "FGVAULT.xlsx" };
-
-        class AuroraInventory {
+        // ========== ULTRA PREMIUM INVENTORY SYSTEM ==========
+        
+        class VisionInventory {
             constructor() {
-                this.db = [];
-                this.debounceTimer = null;
-                this.selectedItem = null;
+                this.data = [];
+                this.filteredData = [];
                 this.currentFilter = 'ALL';
-
-                this.ui = {
-                    search: document.getElementById('searchInput'),
-                    clearBtn: document.getElementById('clearBtn'),
-                    searchBadge: document.getElementById('searchBadge'),
-                    searchBadgeText: document.getElementById('searchBadgeText'),
-                    pillDivider: document.getElementById('pillDivider'),
-                    godBadge: document.getElementById('godBadge'),
-                    welcome: document.getElementById('welcomeState'),
-                    list: document.getElementById('listContainer'),
-                    modal: document.getElementById('detailModal'),
-                    backdrop: document.getElementById('modalBackdrop'),
-                    toast: document.getElementById('toast'),
-                    toastMsg: document.getElementById('toastMsg')
-                };
-
+                this.searchQuery = '';
+                this.currentItem = null;
+                this.chart = null;
+                
                 this.init();
             }
-
+            
             init() {
-                this.ui.list.addEventListener('click', (e) => {
-                    const card = e.target.closest('.item-card');
-                    if (!card) return;
-                    const id = card.getAttribute('data-id');
-                    if (id !== null && this.db[id]) {
-                        this.openModal(this.db[id]);
-                    }
-                });
-
-                this.ui.search.addEventListener('input', (e) => {
-                    const val = e.target.value;
-                    this.ui.clearBtn.style.display = val ? 'block' : 'none';
-                    clearTimeout(this.debounceTimer);
-                    this.debounceTimer = setTimeout(() => this.executeSearch(), 100); 
-                });
-
-                this.ui.clearBtn.addEventListener('click', () => {
-                    this.ui.search.value = '';
-                    this.ui.clearBtn.style.display = 'none';
-                    this.executeSearch();
-                });
-
+                this.cacheDOM();
+                this.bindEvents();
                 this.loadData();
             }
-
-            parseStatus(rawStatus) {
-                const statusStr = String(rawStatus || "").trim().toUpperCase();
-                const isObsolete = statusStr === 'OBSOLETE';
-                return {
-                    text: isObsolete ? 'OBSOLETE' : 'IN USE',
-                    color: isObsolete ? 'var(--color-obsolete)' : 'var(--color-in-use)'
+            
+            cacheDOM() {
+                this.dom = {
+                    search: document.getElementById('searchInput'),
+                    clearSearch: document.getElementById('clearSearchBtn'),
+                    resultChip: document.getElementById('resultChip'),
+                    resultCount: document.getElementById('resultCount'),
+                    emptyState: document.getElementById('emptyState'),
+                    listContainer: document.getElementById('listContainer'),
+                    modalOverlay: document.getElementById('modalOverlay'),
+                    modalContainer: document.getElementById('modalContainer'),
+                    toast: document.getElementById('toast'),
+                    toastMsg: document.getElementById('toastMsg'),
+                    statTotal: document.getElementById('statTotal'),
+                    statActive: document.getElementById('statActive'),
+                    statObsolete: document.getElementById('statObsolete'),
+                    statVendors: document.getElementById('statVendors'),
+                    syncStatus: document.getElementById('syncStatus')
                 };
             }
-
-            getIcon(name) {
-                const n = name.toUpperCase();
-                if (n.includes("CAP") || n.includes("SCREW")) return "fa-ring text-gray-300"; 
-                if (n.includes("JAR")) return "fa-prescription-bottle text-blue-300"; 
-                if (n.includes("BOTTLE") || n.includes("PET")) return "fa-wine-bottle text-purple-300"; 
-                if (n.includes("PUMP") || n.includes("SPRAY")) return "fa-spray-can text-green-300";
-                return "fa-box-open text-gray-400"; 
+            
+            bindEvents() {
+                this.dom.search.addEventListener('input', (e) => {
+                    this.searchQuery = e.target.value;
+                    this.dom.clearSearch.style.display = this.searchQuery ? 'flex' : 'none';
+                    clearTimeout(this.searchDebounce);
+                    this.searchDebounce = setTimeout(() => this.applyFilters(), 200);
+                });
+                
+                this.dom.clearSearch.addEventListener('click', () => {
+                    this.dom.search.value = '';
+                    this.searchQuery = '';
+                    this.dom.clearSearch.style.display = 'none';
+                    this.applyFilters();
+                });
+                
+                document.querySelectorAll('.filter-pill').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.currentFilter = btn.dataset.filter;
+                        this.applyFilters();
+                    });
+                });
             }
-
+            
             async loadData() {
                 try {
-                    const response = await fetch(encodeURI(CONFIG.FILE_NAME) + '?t=' + Date.now());
-                    if (!response.ok) throw new Error("File Missing");
-
+                    const response = await fetch('FGVAULT.xlsx?t=' + Date.now());
+                    if (!response.ok) throw new Error('File not found');
+                    
                     const buffer = await response.arrayBuffer();
                     const workbook = XLSX.read(buffer);
-                    const rawData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { defval: "" });
-
-                    let act = 0, obs = 0;
-
-                    this.db = rawData.map((row, index) => {
-                        const statusData = this.parseStatus(row["STATUS"]);
-                        if(statusData.text === 'OBSOLETE') obs++; else act++;
-
-                        const nameStr = String(row["Item Name"] || "Unknown").trim();
-                        const codeStr = String(row["Item Code"] || "N/A").trim();
-                        const oldCodeStr = String(row["Old Item Code"] || "").trim();
-
-                        return {
-                            id: index,
-                            statusText: statusData.text,
-                            statusColor: statusData.color,
-                            icon: this.getIcon(nameStr),
-                            searchIndex: `${nameStr} ${codeStr} ${oldCodeStr}`.toLowerCase(),
-                            
-                            shape: String(row["Technical DataSheet::Product Shape"] || "-").trim(),
-                            oldCode: oldCodeStr,
-                            code: codeStr,
-                            name: nameStr,
-                            dir: String(row["List of Matrix::Packing Direction of Bottles"] || "-").trim(),
-                            height: String(row["Technical DataSheet::Total Height"] || "-").trim(),
-                            weight: String(row["Technical DataSheet::Weight"] || "-").trim(),
-                            ofc: String(row["Technical DataSheet::OFC"] || "-").trim(),
-                            cbSize: String(row["Corrugated Box Size"] || "-").trim(),
-                            pouchSize: String(row["Pouch Size"] || "-").trim(),
-                            matrix: String(row["List of Matrix::Packing Matrix per Tray"] || "-").trim(),
-                            totalPouch: String(row["List of Matrix::Total Pouch Used"] || "0").trim(),
-                            totalPcs: String(row["List of Matrix::Total Pcs"] || "0").trim(),
-                            dia: String(row["Technical DataSheet::Body Dia Major"] || "-").trim()
-                        };
-                    });
-
-                    this.ui.godBadge.innerText = `${this.db.length} RECORDS`;
-                    document.getElementById('stat-total').innerText = this.db.length;
-                    document.getElementById('stat-active').innerText = act;
-                    document.getElementById('stat-obsolete').innerText = obs;
-
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const raw = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+                    
+                    this.processData(raw);
+                    this.dom.syncStatus.innerText = `${this.data.length} LOADED`;
+                    
                 } catch (error) {
-                    this.ui.godBadge.innerText = "ERROR";
-                    this.ui.godBadge.previousElementSibling.style.backgroundColor = "red";
-                    console.error(error);
+                    console.error('Load error:', error);
+                    this.dom.syncStatus.innerText = 'OFFLINE';
+                    this.showToast('Failed to load data', 'error');
                 }
             }
-
-            setFilter(type, btnElement) {
-                this.currentFilter = type;
-                document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
-                btnElement.classList.add('active');
-                this.executeSearch();
-            }
-
-            executeSearch() {
-                const query = this.ui.search.value.toLowerCase().trim();
+            
+            processData(raw) {
+                let activeCount = 0;
+                let obsoleteCount = 0;
+                const vendors = new Set();
+                const categories = new Map();
                 
-                if (!query && this.currentFilter === 'ALL') {
-                    this.ui.list.classList.add('hidden');
-                    this.ui.welcome.classList.remove('hidden');
-                    this.ui.searchBadge.classList.add('hidden');
-                    this.ui.pillDivider.classList.add('hidden');
-                    return;
-                }
-
-                this.ui.welcome.classList.add('hidden');
-                this.ui.list.classList.remove('hidden');
-
-                const terms = query.split(" ").filter(t => t);
-                const results = this.db.filter(item => {
-                    const textMatch = terms.length === 0 || terms.every(t => item.searchIndex.includes(t));
-                    const filterMatch = this.currentFilter === 'ALL' || item.statusText === this.currentFilter;
-                    return textMatch && filterMatch;
+                this.data = raw.map((row, idx) => {
+                    const statusRaw = String(row["STATUS"] || "IN USE").trim().toUpperCase();
+                    const isActive = statusRaw !== "OBSOLETE";
+                    const status = isActive ? "IN USE" : "OBSOLETE";
+                    
+                    if (isActive) activeCount++;
+                    else obsoleteCount++;
+                    
+                    const vendor = String(row["Vendor List 2::Vendor_Name"] || row["Vendor"] || "Unknown").trim();
+                    vendors.add(vendor);
+                    
+                    const category = String(row["Material List::Material_Detail"] || row["Category"] || "General").trim();
+                    categories.set(category, (categories.get(category) || 0) + 1);
+                    
+                    const name = String(row["Item_Name"] || row["Item Name"] || "Unnamed").trim();
+                    const code = String(row["Item_Code"] || row["Item Code"] || "N/A").trim();
+                    const oldCode = String(row["Old Item Code"] || "").trim();
+                    
+                    return {
+                        id: idx,
+                        status: status,
+                        isActive: isActive,
+                        name: name,
+                        code: code,
+                        oldCode: oldCode,
+                        vendor: vendor,
+                        category: category,
+                        shape: String(row["Technical DataSheet::Product Shape"] || "-").trim(),
+                        dia: String(row["Technical DataSheet::Body Dia Major"] || "-").trim(),
+                        height: String(row["Technical DataSheet::Total Height"] || "-").trim(),
+                        weight: String(row["Technical DataSheet::Weight"] || "-").trim(),
+                        ofc: String(row["Technical DataSheet::OFC"] || "-").trim(),
+                        dir: String(row["List of Matrix::Packing Direction of Bottles"] || "-").trim(),
+                        cbSize: String(row["Corrugated Box Size"] || "-").trim(),
+                        pouchSize: String(row["Pouch Size"] || "-").trim(),
+                        matrix: String(row["List of Matrix::Packing Matrix per Tray"] || "-").trim(),
+                        totalPouch: String(row["List of Matrix::Total Pouch Used"] || "0").trim(),
+                        totalPcs: String(row["List of Matrix::Total Pcs"] || "0").trim(),
+                        searchIndex: `${name} ${code} ${oldCode} ${vendor} ${category}`.toLowerCase(),
+                        icon: this.getItemIcon(name)
+                    };
                 });
-
-                // Update New Search Badge Placement
-                this.ui.searchBadgeText.innerText = `${results.length} Found`;
-                this.ui.searchBadge.classList.remove('hidden');
-                this.ui.pillDivider.classList.remove('hidden');
-
-                if (results.length === 0) {
-                    this.ui.list.innerHTML = '';
-                    this.ui.welcome.classList.remove('hidden');
-                    this.ui.welcome.innerHTML = `
-                        <div class="w-20 h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mb-6 shadow-lg">
-                            <i class="fas fa-search-minus text-3xl text-gray-500"></i>
+                
+                // Update stats
+                this.dom.statTotal.innerText = this.data.length;
+                this.dom.statActive.innerText = activeCount;
+                this.dom.statObsolete.innerText = obsoleteCount;
+                this.dom.statVendors.innerText = vendors.size;
+                
+                // Initialize chart with category data
+                this.initChart(categories);
+                
+                // Apply initial filters (empty state)
+                this.applyFilters();
+            }
+            
+            getItemIcon(name) {
+                const n = name.toLowerCase();
+                if (n.includes('cap') || n.includes('screw')) return 'fa-crown';
+                if (n.includes('jar')) return 'fa-jar';
+                if (n.includes('bottle')) return 'fa-wine-bottle';
+                if (n.includes('pump')) return 'fa-spray-can';
+                if (n.includes('tube')) return 'fa-tube';
+                return 'fa-cube';
+            }
+            
+            initChart(categories) {
+                const sorted = Array.from(categories.entries()).sort((a, b) => b[1] - a[1]).slice(0, 6);
+                const labels = sorted.map(c => c[0].length > 15 ? c[0].substring(0, 12) + '...' : c[0]);
+                const values = sorted.map(c => c[1]);
+                
+                const ctx = document.getElementById('categoryChart').getContext('2d');
+                
+                if (this.chart) this.chart.destroy();
+                
+                this.chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Items',
+                            data: values,
+                            backgroundColor: 'rgba(10, 132, 255, 0.7)',
+                            borderRadius: 8,
+                            barPercentage: 0.65
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', titleColor: '#fff', bodyColor: '#ccc' }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888' } },
+                            x: { ticks: { color: '#888', font: { size: 10 } }, grid: { display: false } }
+                        }
+                    }
+                });
+            }
+            
+            applyFilters() {
+                const searchLower = this.searchQuery.toLowerCase().trim();
+                const searchWords = searchLower ? searchLower.split(/\s+/) : [];
+                
+                this.filteredData = this.data.filter(item => {
+                    // Status filter
+                    if (this.currentFilter === 'IN USE' && !item.isActive) return false;
+                    if (this.currentFilter === 'OBSOLETE' && item.isActive) return false;
+                    
+                    // Search filter - fuzzy match (all words must appear)
+                    if (searchWords.length) {
+                        return searchWords.every(word => item.searchIndex.includes(word));
+                    }
+                    
+                    return true;
+                });
+                
+                this.updateUI();
+            }
+            
+            updateUI() {
+                const hasActiveFilters = this.searchQuery || this.currentFilter !== 'ALL';
+                const hasResults = this.filteredData.length > 0;
+                
+                // Update result chip
+                if (this.searchQuery && hasResults) {
+                    this.dom.resultChip.classList.remove('hidden');
+                    this.dom.resultCount.innerText = this.filteredData.length;
+                } else {
+                    this.dom.resultChip.classList.add('hidden');
+                }
+                
+                // Show/hide containers
+                if (hasActiveFilters && hasResults) {
+                    this.dom.emptyState.classList.add('hidden');
+                    this.dom.listContainer.classList.remove('hidden');
+                    this.renderList();
+                } else if (hasActiveFilters && !hasResults) {
+                    this.dom.emptyState.classList.remove('hidden');
+                    this.dom.listContainer.classList.add('hidden');
+                    this.dom.emptyState.innerHTML = `
+                        <div class="empty-icon">
+                            <i class="fas fa-search-minus text-gray-600 text-3xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-2">No Match</h3>
-                        <p class="text-sm text-gray-500">Query returned zero results.</p>
+                        <h3 class="text-xl font-bold text-white mb-2">No Results</h3>
+                        <p class="text-sm text-gray-500">Try a different search term</p>
                     `;
                 } else {
-                    this.renderList(results); 
+                    this.dom.emptyState.classList.remove('hidden');
+                    this.dom.listContainer.classList.add('hidden');
+                    this.dom.emptyState.innerHTML = `
+                        <div class="empty-icon">
+                            <i class="fas fa-database text-gray-600 text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Ready</h3>
+                        <p class="text-sm text-gray-500">Search or filter to explore inventory</p>
+                    `;
                 }
             }
-
-            renderList(items) {
-                window.requestAnimationFrame(() => {
-                    const fragment = document.createDocumentFragment();
-                    this.ui.list.innerHTML = '';
-
-                    const renderLimit = items.slice(0, 100);
-
-                    renderLimit.forEach((item, index) => {
-                        const card = document.createElement('div');
-                        card.className = 'item-card';
-                        card.setAttribute('data-id', item.id);
-                        
-                        const staggerVal = index < 15 ? index : 0;
-                        card.style.setProperty('--stagger-idx', staggerVal);
-
-                        card.innerHTML = `
-                            <div class="card-accent" style="color: ${item.statusColor}; background: ${item.statusColor};"></div>
-                            <div class="icon-box"><i class="fas ${item.icon}"></i></div>
-                            <div class="card-body">
-                                <h3 class="item-name">${item.name}</h3>
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="tag-code">${item.code}</span>
-                                    <span style="color: ${item.statusColor}; font-size: 10px; font-weight: 900; letter-spacing: 0.5px; text-shadow: 0 0 10px ${item.statusColor};">• ${item.statusText}</span>
-                                </div>
+            
+            renderList() {
+                const container = this.dom.listContainer;
+                container.innerHTML = '';
+                
+                const itemsToShow = this.filteredData.slice(0, 150);
+                
+                itemsToShow.forEach((item, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'item-card';
+                    card.style.animationDelay = `${Math.min(idx * 0.02, 0.5)}s`;
+                    card.onclick = () => this.openModal(item);
+                    
+                    const statusColor = item.isActive ? 'var(--color-active)' : 'var(--color-obsolete)';
+                    const statusText = item.isActive ? 'ACTIVE' : 'OBSOLETE';
+                    
+                    card.innerHTML = `
+                        <div class="card-icon" style="background: ${item.isActive ? 'rgba(0,230,118,0.1)' : 'rgba(255,69,58,0.1)'}">
+                            <i class="fas ${item.icon}" style="color: ${statusColor}"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="item-name">${this.escapeHtml(item.name)}</h3>
+                            <div class="item-meta">
+                                <span class="meta-badge">${this.escapeHtml(item.code)}</span>
+                                <span class="meta-badge" style="color: ${statusColor}">● ${statusText}</span>
+                                <span class="meta-badge">${this.escapeHtml(item.vendor)}</span>
                             </div>
-                            <div class="card-stats border-l border-white/10 pl-4 w-20">
-                                <span class="text-2xl font-black text-white leading-none">${item.totalPcs}</span>
-                                <span class="text-[9px] uppercase tracking-widest text-gray-500 font-bold mt-1">Total Pcs</span>
-                            </div>
-                            <i class="fas fa-chevron-right view-arrow"></i>
-                        `;
-                        fragment.appendChild(card);
-                    });
-
-                    this.ui.list.appendChild(fragment);
+                        </div>
+                        <div class="stat-badge">
+                            <div class="stat-badge-number">${this.formatNumber(item.totalPcs)}</div>
+                            <div class="text-[9px] text-gray-500 uppercase">Pcs</div>
+                        </div>
+                        <i class="fas fa-chevron-right hover-arrow"></i>
+                    `;
+                    
+                    container.appendChild(card);
                 });
             }
-
-            setSafeText(elementId, value) {
-                const el = document.getElementById(elementId);
-                if (el) el.innerText = value;
-            }
-
+            
             openModal(item) {
-                this.selectedItem = item;
+                this.currentItem = item;
                 
-                const badge = document.getElementById('mStatusBadge');
-                badge.innerText = item.statusText;
-                badge.style.backgroundColor = item.statusColor;
-                badge.style.boxShadow = `0 4px 15px ${item.statusColor}80`;
-
-                this.setSafeText('mName', item.name);
-                this.setSafeText('mCode', item.code);
-                this.setSafeText('mOldCode', item.oldCode ? `(Old: ${item.oldCode})` : "");
+                // Status badge
+                const statusBadge = document.getElementById('modalStatusBadge');
+                statusBadge.innerText = item.isActive ? 'ACTIVE' : 'OBSOLETE';
+                statusBadge.style.background = item.isActive ? 'var(--color-active)' : 'var(--color-obsolete)';
+                statusBadge.style.boxShadow = `0 0 15px ${item.isActive ? 'var(--color-active)' : 'var(--color-obsolete)'}`;
                 
-                this.setSafeText('mShape', item.shape);
-                this.setSafeText('mHeight', item.height);
-                this.setSafeText('mWeight', item.weight);
-                this.setSafeText('mOfc', item.ofc);
-                this.setSafeText('mDia', item.dia); 
-
-                this.setSafeText('mDir', item.dir);
-                this.setSafeText('mCBSize', item.cbSize);
-                this.setSafeText('mPouchSize', item.pouchSize);
-                this.setSafeText('mMatrix', item.matrix);
-                this.setSafeText('mTotalPouch', item.totalPouch);
-                this.setSafeText('mTotalPcs', item.totalPcs);
-
-                this.ui.backdrop.classList.add('show');
-                this.ui.modal.classList.add('show');
-                document.body.style.overflow = 'hidden'; 
+                document.getElementById('modalName').innerText = item.name;
+                document.getElementById('modalCode').innerText = item.code;
+                document.getElementById('modalOldCode').innerText = item.oldCode ? `(Old: ${item.oldCode})` : '';
+                
+                document.getElementById('modalShape').innerText = item.shape;
+                document.getElementById('modalDia').innerText = item.dia;
+                document.getElementById('modalHeight').innerText = item.height;
+                document.getElementById('modalWeight').innerText = item.weight;
+                document.getElementById('modalOfc').innerText = item.ofc;
+                document.getElementById('modalDir').innerText = item.dir;
+                document.getElementById('modalCBSize').innerText = item.cbSize;
+                document.getElementById('modalPouchSize').innerText = item.pouchSize;
+                document.getElementById('modalMatrix').innerText = item.matrix;
+                document.getElementById('modalTotalPcs').innerText = this.formatNumber(item.totalPcs);
+                
+                this.dom.modalOverlay.classList.add('active');
+                this.dom.modalContainer.classList.add('active');
+                document.body.style.overflow = 'hidden';
             }
-
+            
             closeModal() {
-                this.ui.modal.classList.remove('show');
-                this.ui.backdrop.classList.remove('show');
+                this.dom.modalOverlay.classList.remove('active');
+                this.dom.modalContainer.classList.remove('active');
                 document.body.style.overflow = '';
-                this.selectedItem = null;
+                this.currentItem = null;
             }
-
-            generateExportText() {
-                const i = this.selectedItem;
-                if (!i) return "";
-                return `📦 *${i.name}*\n🆔 Code: ${i.code}\n🟢 Status: ${i.statusText}\n\n📊 *Technical Data:*\n• Body Dia: ${i.dia}\n• Shape: ${i.shape}\n• Height: ${i.height}\n• Weight: ${i.weight}\n• OFC: ${i.ofc}\n\n📦 *Packaging Matrix:*\n• Total Pcs: ${i.totalPcs}\n• Matrix: ${i.matrix}\n• Direction: ${i.dir}\n• CB Size: ${i.cbSize}\n• Pouch Size: ${i.pouchSize}\n• Total Pouch: ${i.totalPouch}`;
-            }
-
-            nativeShare() {
-                const text = this.generateExportText();
+            
+            shareItem() {
+                if (!this.currentItem) return;
+                
+                const item = this.currentItem;
+                const text = `📦 *${item.name}*\n` +
+                    `🆔 Code: ${item.code}\n` +
+                    `📊 Status: ${item.isActive ? 'ACTIVE' : 'OBSOLETE'}\n` +
+                    `🏭 Vendor: ${item.vendor}\n\n` +
+                    `🔧 *Technical Specs*\n` +
+                    `• Shape: ${item.shape}\n` +
+                    `• Body Diameter: ${item.dia}\n` +
+                    `• Height: ${item.height}\n` +
+                    `• Weight: ${item.weight}\n` +
+                    `• OFC: ${item.ofc}\n\n` +
+                    `📦 *Packaging*\n` +
+                    `• Direction: ${item.dir}\n` +
+                    `• CB Size: ${item.cbSize}\n` +
+                    `• Pouch Size: ${item.pouchSize}\n` +
+                    `• Matrix: ${item.matrix}\n` +
+                    `• Total Pieces: ${this.formatNumber(item.totalPcs)}`;
                 
                 if (navigator.share) {
-                    navigator.share({
-                        title: 'Inventory Spec Sheet',
-                        text: text
-                    }).catch((error) => console.log('User cancelled share'));
+                    navigator.share({ title: 'Inventory Item', text: text }).catch(() => {});
                 } else {
                     navigator.clipboard.writeText(text);
-                    this.ui.toastMsg.innerText = "Copied to Clipboard";
-                    this.ui.toast.classList.add('show');
-                    setTimeout(() => this.ui.toast.classList.remove('show'), 2000);
+                    this.showToast('Copied to clipboard!', 'success');
                 }
             }
+            
+            showToast(message, type = 'success') {
+                this.dom.toastMsg.innerText = message;
+                this.dom.toast.classList.add('show');
+                setTimeout(() => this.dom.toast.classList.remove('show'), 2500);
+            }
+            
+            formatNumber(num) {
+                const n = parseInt(num);
+                if (isNaN(n)) return num;
+                return n.toLocaleString();
+            }
+            
+            escapeHtml(str) {
+                if (!str) return '';
+                return str.replace(/[&<>]/g, function(m) {
+                    if (m === '&') return '&amp;';
+                    if (m === '<') return '&lt;';
+                    if (m === '>') return '&gt;';
+                    return m;
+                });
+            }
         }
-
-        const app = new AuroraInventory();
+        
+        function closeModal() { window.app?.closeModal(); }
+        function shareItem() { window.app?.shareItem(); }
+        
+        window.app = new VisionInventory();
     </script>
 </body>
 </html>
