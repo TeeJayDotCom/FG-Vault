@@ -34,7 +34,7 @@
             overflow-x: hidden;
         }
 
-        /* Ambient Glowing Orbs in Background (Apple Siri style) */
+        /* Ambient Glowing Orbs in Background */
         .ambient-glow-1 {
             position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
             background: radial-gradient(circle, rgba(10,132,255,0.15) 0%, transparent 70%);
@@ -92,7 +92,6 @@
         }
         .glass-card:active { transform: scale(0.96); background: rgba(50, 50, 55, 0.8); }
         
-        /* Graphic edge highlight on cards */
         .glass-card::before {
             content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
             background: linear-gradient(180deg, #0A84FF, #BF5AF2);
@@ -115,14 +114,12 @@
         .bottom-sheet.show { transform: translateY(0); }
         .sheet-notch { width: 40px; height: 5px; background: rgba(255,255,255,0.2); border-radius: 3px; margin: 12px auto; }
         
-        /* Modal Content Styling */
         .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
         .spec-box {
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05);
             padding: 12px; border-radius: 14px;
         }
 
-        /* Action Buttons */
         .btn-gradient {
             background: linear-gradient(135deg, #30D158 0%, #248A3D 100%);
             color: white; border: none; padding: 16px; border-radius: 16px;
@@ -131,7 +128,6 @@
         }
         .btn-gradient:active { transform: scale(0.97); }
 
-        /* Toast */
         #toast {
             position: fixed; top: 40px; left: 50%; transform: translate(-50%, -150%);
             background: rgba(255,255,255,0.95); color: black; padding: 14px 24px;
@@ -237,6 +233,9 @@
                 <div class="flex justify-between p-3 border-b border-white/5"><span class="text-sm text-gray-400">CB Size</span><span id="mCBSize" class="text-sm font-semibold text-white text-right w-1/2 break-words"></span></div>
                 <div class="flex justify-between p-3 border-b border-white/5"><span class="text-sm text-gray-400">Pouch Size</span><span id="mPouchSize" class="text-sm font-semibold text-white text-right w-1/2 break-words"></span></div>
                 <div class="flex justify-between p-3 border-b border-white/5"><span class="text-sm text-gray-400">Matrix/Tray</span><span id="mMatrix" class="text-sm font-semibold text-white text-right w-1/2 break-words"></span></div>
+                
+                <div class="flex justify-between p-3 border-b border-white/5"><span class="text-sm text-gray-400">Total Pouch</span><span id="mTotalPouch" class="text-sm font-semibold text-white text-right w-1/2 break-words"></span></div>
+                
                 <div class="flex justify-between p-3 bg-blue-500/10"><span class="text-sm font-bold text-blue-400">Total Pcs</span><span id="mTotalPcs" class="text-lg font-black text-white"></span></div>
             </div>
 
@@ -253,7 +252,6 @@
     <div id="toast"><i class="fas fa-check-circle text-green-500 mr-2"></i><span id="toastMsg">Success</span></div>
 
     <script>
-        // CONFIGURATION - MUST MATCH GITHUB FILE EXACTLY
         const CONFIG = {
             FILE_NAME: "FGVAULT.xlsx" 
         };
@@ -317,7 +315,6 @@
                     const workbook = XLSX.read(buffer);
                     const rawData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { defval: "" });
 
-                    // Accurate Data Mapping based on user requirements
                     this.db = rawData.map((row, index) => ({
                         id: index,
                         status: String(row["STATUS"] || "-").trim(),
@@ -334,7 +331,6 @@
                         matrix: String(row["List of Matrix::Packing Matrix per Tray"] || "-").trim(),
                         totalPouch: String(row["List of Matrix::Total Pouch Used"] || "0").trim(),
                         totalPcs: String(row["List of Matrix::Total Pcs"] || "0").trim(),
-                        // Explicitly mapping Body Dia as requested
                         dia: String(row["Technical DataSheet::Body Dia Major"] || "-").trim()
                     }));
 
@@ -351,7 +347,6 @@
             searchData(query) {
                 const term = query.toUpperCase().trim();
                 
-                // Show Welcome Screen if search is empty
                 if (!term) {
                     this.ui.list.classList.add('hidden');
                     this.ui.empty.classList.add('hidden');
@@ -359,7 +354,6 @@
                     return;
                 }
 
-                // Hide Welcome Screen when searching
                 this.ui.welcome.classList.add('hidden');
                 this.ui.list.classList.remove('hidden');
 
@@ -382,7 +376,6 @@
                 const fragment = document.createDocumentFragment();
                 this.ui.list.innerHTML = '';
 
-                // Limit render to keep UI silky smooth
                 const renderLimit = items.slice(0, 150);
 
                 renderLimit.forEach(item => {
@@ -390,7 +383,6 @@
                     card.className = 'glass-card';
                     card.onclick = () => this.openModal(item);
 
-                    // FULL ITEM NAME (No Truncation) - Uses leading-snug and break-words
                     card.innerHTML = `
                         <div class="flex justify-between items-start gap-4">
                             <div class="flex-1">
@@ -412,26 +404,34 @@
                 this.ui.list.appendChild(fragment);
             }
 
+            // Safe Text Function: Prevents crashing even if HTML goes missing
+            setSafeText(elementId, value) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.innerText = value;
+                }
+            }
+
             openModal(item) {
                 this.selectedItem = item;
                 
-                document.getElementById('mName').innerText = item.name;
-                document.getElementById('mCode').innerText = item.code;
-                document.getElementById('mOldCode').innerText = item.oldCode !== "-" ? `(Old: ${item.oldCode})` : "";
-                document.getElementById('mStatus').innerText = item.status;
+                this.setSafeText('mName', item.name);
+                this.setSafeText('mCode', item.code);
+                this.setSafeText('mOldCode', item.oldCode !== "-" ? `(Old: ${item.oldCode})` : "");
+                this.setSafeText('mStatus', item.status);
                 
-                document.getElementById('mShape').innerText = item.shape;
-                document.getElementById('mHeight').innerText = item.height;
-                document.getElementById('mWeight').innerText = item.weight;
-                document.getElementById('mOfc').innerText = item.ofc;
-                document.getElementById('mDia').innerText = item.dia; // Prominent Body Dia
+                this.setSafeText('mShape', item.shape);
+                this.setSafeText('mHeight', item.height);
+                this.setSafeText('mWeight', item.weight);
+                this.setSafeText('mOfc', item.ofc);
+                this.setSafeText('mDia', item.dia); 
 
-                document.getElementById('mDir').innerText = item.dir;
-                document.getElementById('mCBSize').innerText = item.cbSize;
-                document.getElementById('mPouchSize').innerText = item.pouchSize;
-                document.getElementById('mMatrix').innerText = item.matrix;
-                document.getElementById('mTotalPouch').innerText = item.totalPouch;
-                document.getElementById('mTotalPcs').innerText = item.totalPcs;
+                this.setSafeText('mDir', item.dir);
+                this.setSafeText('mCBSize', item.cbSize);
+                this.setSafeText('mPouchSize', item.pouchSize);
+                this.setSafeText('mMatrix', item.matrix);
+                this.setSafeText('mTotalPouch', item.totalPouch); // BUG FIXED HERE
+                this.setSafeText('mTotalPcs', item.totalPcs);
 
                 this.ui.backdrop.classList.add('show');
                 this.ui.modal.classList.add('show');
@@ -448,23 +448,7 @@
             generateExportText() {
                 const i = this.selectedItem;
                 if (!i) return "";
-                return `📦 *${i.name}*
-🆔 Code: ${i.code}
-
-📊 *Technical Data:*
-• Dia (Body): ${i.dia}
-• Shape: ${i.shape}
-• Height: ${i.height}
-• Weight: ${i.weight}
-• OFC: ${i.ofc}
-
-📦 *Packaging Matrix:*
-• Total Pcs: ${i.totalPcs}
-• Matrix: ${i.matrix}
-• Direction: ${i.dir}
-• CB Size: ${i.cbSize}
-• Pouch Size: ${i.pouchSize}
-• Total Pouch: ${i.totalPouch}`;
+                return `📦 *${i.name}*\n🆔 Code: ${i.code}\n\n📊 *Technical Data:*\n• Dia (Body): ${i.dia}\n• Shape: ${i.shape}\n• Height: ${i.height}\n• Weight: ${i.weight}\n• OFC: ${i.ofc}\n\n📦 *Packaging Matrix:*\n• Total Pcs: ${i.totalPcs}\n• Matrix: ${i.matrix}\n• Direction: ${i.dir}\n• CB Size: ${i.cbSize}\n• Pouch Size: ${i.pouchSize}\n• Total Pouch: ${i.totalPouch}`;
             }
 
             shareWhatsApp() {
@@ -480,7 +464,6 @@
             }
         }
 
-        // Initialize Application
         const app = new RetinaInventory();
     </script>
 </body>
