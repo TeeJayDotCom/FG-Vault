@@ -43,11 +43,12 @@
         @keyframes aurora { 0% { transform: translate3d(0,0,0) scale(1); } 100% { transform: translate3d(40px, 40px, 0) scale(1.1); } }
 
         /* === STICKY NAV & SEARCH === */
-        .super-header {
+        .sticky-search-bar {
             position: sticky; top: 0; z-index: 100;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 80%, transparent 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.85) 75%, transparent 100%);
             backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-            padding: 20px 20px 16px 20px; transform: translateZ(0); 
+            padding: 12px 20px 16px 20px; 
+            transform: translateZ(0); 
         }
 
         .search-pod {
@@ -171,7 +172,8 @@
         <div class="aurora-blob blob-3"></div>
     </div>
 
-    <div class="super-header">
+    <!-- NON-STICKY TOP SECTION -->
+    <div class="px-5 pt-6 pb-2">
         <div class="flex justify-between items-center mb-6">
             <div>
                 <h1 class="text-3xl font-black text-white tracking-tight flex items-center gap-3">
@@ -198,7 +200,10 @@
                 <span class="dash-lbl text-gray-400">Obsolete</span>
             </div>
         </div>
+    </div>
         
+    <!-- STICKY SEARCH SECTION -->
+    <div class="sticky-search-bar">
         <div class="search-pod">
             <i class="fas fa-search search-icon"></i>
             <input type="text" id="searchInput" class="search-input" placeholder="Search records..." autocomplete="off">
